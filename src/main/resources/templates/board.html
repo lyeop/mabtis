@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .post-card {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>게시글을 작성해주세요, <span th:text="${username}"></span>님!</h2>
+        <div>
+            <form action="/logout" method="post" class="d-inline">
+                <button type="submit" class="btn btn-danger">로그아웃</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 게시물 생성 폼 -->
+    <form action="/createPost" method="post" class="mb-4">
+        <div class="form-group">
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="content">내용:</label>
+            <textarea id="content" name="content" class="form-control" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">작성</button>
+    </form>
+
+    <hr>
+
+    <!-- 게시물 목록 -->
+    <div th:each="post : ${posts}">
+        <div class="card post-card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${post.title}"></h5>
+                <p class="card-text" th:text="${post.content}"></p>
+                <p class="card-text">
+                    작성자 <span th:text="${post.userId}"></span>
+                </p>
+                <!-- 게시글 수정 버튼 -->
+                <form th:action="@{/editPost/{id}(id=${post.id})}" method="get" class="d-inline">
+                    <button type="submit" class="btn btn-warning btn-sm">수정</button>
+                </form>
+                <!-- 게시글 삭제 버튼 -->
+                <form action="/deletePost" method="post" th:action="@{/deletePost}" class="d-inline">
+                    <input type="hidden" name="id" th:value="${post.id}">
+                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
